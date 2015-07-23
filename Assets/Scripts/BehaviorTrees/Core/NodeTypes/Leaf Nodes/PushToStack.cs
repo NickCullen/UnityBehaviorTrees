@@ -32,7 +32,8 @@ public class PushToStack : Leaf
             if (methodInfo != null)
             {
                 input[0] = mItem;
-                object ret = methodInfo.Invoke(mStack, input);
+                methodInfo.Invoke(mStack, input);
+                mReturnValue = BehaviorReturn.Success;
             }
         }
 
