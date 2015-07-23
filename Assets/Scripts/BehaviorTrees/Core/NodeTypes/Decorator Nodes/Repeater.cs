@@ -5,7 +5,7 @@ public class Repeater : Decorator
 {
     private int mLoopCount = 0; /**< Number of times to loop the repeater */
 
-    public override IEnumerator Begin(BehaviorTree tree)
+    public override IEnumerator Process(BehaviorTree tree)
     {
         for (int i = 0; i < mLoopCount; i++)
             yield return BeginNode(tree, mChild);

@@ -13,7 +13,7 @@ public class RandomSelector : Composite
                                   .ToArray(); // convert to array
     }
 
-    public override IEnumerator Begin(BehaviorTree tree)
+    public override IEnumerator Process(BehaviorTree tree)
     {
         int[] indices = UniqueRandomRange(0, mChildren.Count);
 

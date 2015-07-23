@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Selector : Composite
 {
-    public override IEnumerator Begin(BehaviorTree tree)
+    public override IEnumerator Process(BehaviorTree tree)
     {
         //start with fail this time
         mReturnValue = BehaviorReturn.Failure;

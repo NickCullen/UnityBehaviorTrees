@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Sequence : Composite
 {
-    public override IEnumerator Begin(BehaviorTree tree)
+    public override IEnumerator Process(BehaviorTree tree)
     {
         //start with success
         mReturnValue = BehaviorReturn.Success;

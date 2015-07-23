@@ -3,7 +3,7 @@ using System.Collections;
 
 public class RepeatUntilFail : Decorator
 {
-    public override IEnumerator Begin(BehaviorTree tree)
+    public override IEnumerator Process(BehaviorTree tree)
     {
         do
         {
