@@ -14,12 +14,17 @@ public class BehaviorTree : MonoBehaviour
 
     Dictionary<string, BehaviorVariable> mVariables = new Dictionary<string,BehaviorVariable>();        /**< Variables for this behavior tree */
 
+    Stack<int> stack = new Stack<int>();
     /**
      * Test cases
      */
     void Start()
     {
-        Begin(new RandomSelector());
+        
+        stack.Push(4);
+        stack.Push(2);
+        
+        Begin(new PushToStack(stack, 5));
     }
 
     /**
