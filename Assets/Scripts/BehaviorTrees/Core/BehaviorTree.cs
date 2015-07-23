@@ -14,17 +14,12 @@ public class BehaviorTree : MonoBehaviour
 
     Dictionary<string, BehaviorVariable> mVariables = new Dictionary<string,BehaviorVariable>();        /**< Variables for this behavior tree */
 
-    Stack<int> stack = new Stack<int>();
     /**
      * Test cases
      */
     void Start()
     {
-        
-        stack.Push(4);
-        stack.Push(2);
-        
-        Begin(new PushToStack(stack, 5));
+      //  Begin(new IsNullObject(i));
     }
 
     /**
@@ -37,6 +32,8 @@ public class BehaviorTree : MonoBehaviour
         mCurrent = node;
 
         yield return BehaviorNode.BeginNode(this,node);
+
+        Debug.Log(node.ReturnValue);
 
         mCurrent = null;
     }
