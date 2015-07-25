@@ -16,7 +16,7 @@ public class PushToStack : Leaf
      * @param stack The stack to push to
      * @param item The item variable
      */
-    public PushToStack(object stack, object item)
+    public PushToStack(BehaviorNode parent, object stack, object item) : base(parent)
     {
         mStack = stack;
         mItem = item;

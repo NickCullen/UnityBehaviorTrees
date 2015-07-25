@@ -13,7 +13,7 @@ public class IsStackEmpty : Leaf
      * Constructor
      * @param count The stack count to check is empty or not
      */
-    public IsStackEmpty(object stack)
+    public IsStackEmpty(BehaviorNode parent, object stack) : base(parent)
     {
         mStack = stack;
     }

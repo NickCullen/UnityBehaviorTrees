@@ -11,7 +11,7 @@ public class SetVariable : Leaf
      * @param id The variable id
      * @param variable The variable object
      */
-    public SetVariable(string id, object variable)
+    public SetVariable(BehaviorNode parent, string id, object variable) : base(parent)
     {
         mID = id;
         mVar = variable;

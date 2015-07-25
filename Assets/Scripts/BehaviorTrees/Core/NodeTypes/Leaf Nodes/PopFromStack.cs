@@ -9,7 +9,7 @@ using System;
 public class PopFromStack : Leaf 
 {
 
-    private object mStack;
+    private string mStack;
     private string mID;
 
 	/**
@@ -17,7 +17,7 @@ public class PopFromStack : Leaf
      * @param stack The stack the item will be popped from
      * @param itemID The id of the item that will be set in the BehaviorTrees variable dictionary when popped
      */
-    public PopFromStack(object stack, string itemID)
+    public PopFromStack(BehaviorNode parent, string stack, string itemID) : base(parent)
     {
         mStack = stack;
         mID = itemID;
@@ -27,16 +27,24 @@ public class PopFromStack : Leaf
     {
         mReturnValue = BehaviorReturn.Failure;
 
-        if(mStack != null && !string.IsNullOrEmpty(mID))
+        BehaviorVariable stackVar = tree.GetVariable(mStack);
+        if (stackVar != null)
         {
-            MethodInfo methodInfo = mStack.GetType().GetMethod("Pop");
-            if(methodInfo != null)
+            //get required propetys/funcs
+            PropertyInfo countProp = stackVar.Variable.GetType().GetProperty("Count");
+            MethodInfo methodInfo = stackVar.Variable.GetType().GetMethod("Pop");
+
+            if(countProp != null && methodInfo != null)
             {
-                object ret = methodInfo.Invoke(mStack, null);
-                if(ret != null)
+                int count = (int)countProp.GetValue(stackVar.Variable,null);
+                if(count > 0)
                 {
-                    tree.AddVariable(new BehaviorVariable(mID,ret));
-                    mReturnValue = BehaviorReturn.Success;
+                    object ret = methodInfo.Invoke(stackVar.Variable, null);
+                    if (ret != null)
+                    {
+                        tree.AddVariable(new BehaviorVariable(mID, ret));
+                        mReturnValue = BehaviorReturn.Success;
+                    }
                 }
             }
         }

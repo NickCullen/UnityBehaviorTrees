@@ -7,5 +7,11 @@ using System.Collections;
  */
 public class Leaf : BehaviorNode
 {
-
+     /**
+     * CTOR
+     */
+    public Leaf(BehaviorNode parent) : base(parent)
+    {
+         
+    }
 }

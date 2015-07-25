@@ -9,7 +9,7 @@ public class IsNullObject : Leaf
      * ctor
      * @param o The object to check if null
      */
-	public IsNullObject(object o)
+	public IsNullObject(BehaviorNode parent, object o) : base (parent)
     {
         mObject = o;
     }

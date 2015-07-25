@@ -4,6 +4,11 @@ using System.Linq;
 
 public class RandomSelector : Composite
 {
+    public RandomSelector(BehaviorNode parent) : base(parent)
+    {
+
+    }
+
     private int [] UniqueRandomRange(int lower, int upper)
     {
         System.Random rastgele = new System.Random();
@@ -22,7 +27,10 @@ public class RandomSelector : Composite
 
         foreach (int i in indices)
         {
-            yield return BeginNode(tree, mChildren[i]);
+            yield return tree.BeginNode(mChildren[i]);
+
+            //remember to call OnComplete
+            mChildren[i].OnComplete(tree);
 
             if (mChildren[i].ReturnValue == BehaviorReturn.Success)
             {

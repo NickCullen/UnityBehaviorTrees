@@ -4,6 +4,10 @@ using System.Linq;
 
 public class RandomSequence : Composite
 {
+    public RandomSequence(BehaviorNode parent) : base(parent)
+    {
+
+    }
 
     private int[] UniqueRandomRange(int lower, int upper)
     {
@@ -23,7 +27,10 @@ public class RandomSequence : Composite
 
         foreach(int i in indices)
         {
-            yield return BeginNode(tree, mChildren[i]);
+            yield return tree.BeginNode(mChildren[i]);
+
+            //remember to call OnComplete
+            mChildren[i].OnComplete(tree);
 
             if (mChildren[i].ReturnValue == BehaviorReturn.Failure)
             {

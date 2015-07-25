@@ -3,13 +3,26 @@ using System.Collections;
 
 public class RepeatUntilFail : Decorator
 {
+    public RepeatUntilFail(BehaviorNode parent) : base(parent)
+    {
+
+    }
+
+
     public override IEnumerator Process(BehaviorTree tree)
     {
-        do
+        if (mChild != null)
         {
-            yield return BeginNode(tree, mChild);
-        } while (mChild.ReturnValue != BehaviorReturn.Failure);
+            do
+            {
+                yield return tree.BeginNode(mChild);
 
-        mReturnValue = BehaviorReturn.Failure;
+                mChild.OnComplete(tree);
+            } while (mChild.ReturnValue != BehaviorReturn.Failure);
+        }
+        else
+            yield return null;
+            
+        mReturnValue = BehaviorReturn.Success;
     }
 }

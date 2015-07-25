@@ -10,17 +10,13 @@ using System.Collections.Generic;
  */
 public class BehaviorTree : MonoBehaviour 
 {
-    BehaviorNode mCurrent = null;       /**< The currently executing node */
+    protected BehaviorNode mCurrent = null;       /**< The currently executing node */
 
-    Dictionary<string, BehaviorVariable> mVariables = new Dictionary<string,BehaviorVariable>();        /**< Variables for this behavior tree */
+    protected Dictionary<string, BehaviorVariable> mVariables = new Dictionary<string,BehaviorVariable>();        /**< Variables for this behavior tree */
 
-    /**
-     * Test cases
-     */
-    void Start()
-    {
-      //  Begin(new IsNullObject(i));
-    }
+    public BehaviorReturn mStatus = BehaviorReturn.Invalid;
+
+    public bool mBehaveOnStart = false;
 
     /**
      * Coroutine to begin the BehaviorTree
@@ -29,11 +25,17 @@ public class BehaviorTree : MonoBehaviour
      */
     private IEnumerator Coroutine_Execute(BehaviorNode node)
     {
+        //set this to true as the behavior tree is running
+        mStatus = BehaviorReturn.Running;
+
         mCurrent = node;
 
-        yield return BehaviorNode.BeginNode(this,node);
+        yield return BeginNode(mCurrent);
 
-        Debug.Log(node.ReturnValue);
+        mCurrent.OnComplete(this);
+
+        //the status of this tree will be whatever the value of the first node was
+        mStatus = mCurrent.ReturnValue;
 
         mCurrent = null;
     }
@@ -49,6 +51,24 @@ public class BehaviorTree : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(Coroutine_Execute(node));
         }
+    }
+
+    /**
+     * Begins a node and attaches the coroutine to this object
+     * If you use this method you MUST call the node.OnComplete method
+     * after it yields
+     */
+    public Coroutine BeginNode(BehaviorNode node)
+    {
+        Debug.Log("Beginning " + node);
+
+        node.ReturnValue = BehaviorReturn.Running;
+
+        //init
+        node.OnStart(this);
+
+        //process
+        return StartCoroutine(node.Process(this));
     }
 
     /**
