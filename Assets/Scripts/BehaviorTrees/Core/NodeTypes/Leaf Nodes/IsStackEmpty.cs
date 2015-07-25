@@ -7,13 +7,13 @@ using System.Reflection;
  */
 public class IsStackEmpty : Leaf
 {
-    object mStack = null;
+    string mStack = null;
 
     /**
      * Constructor
      * @param count The stack count to check is empty or not
      */
-    public IsStackEmpty(BehaviorNode parent, object stack) : base(parent)
+    public IsStackEmpty(BehaviorNode parent, string stack) : base(parent)
     {
         mStack = stack;
     }
@@ -22,13 +22,14 @@ public class IsStackEmpty : Leaf
     public override IEnumerator Process(BehaviorTree tree)
     {
         mReturnValue = BehaviorReturn.Success;
+        BehaviorVariable stackVar = tree.GetVariable(mStack);
 
-        if(mStack != null)
+        if(stackVar != null && stackVar.Variable != null)
         {
-            PropertyInfo countProperty = mStack.GetType().GetProperty("Count");
+            PropertyInfo countProperty = stackVar.Variable.GetType().GetProperty("Count");
             if(countProperty != null)
             {
-                object val = countProperty.GetValue(mStack, null);
+                object val = countProperty.GetValue(stackVar.Variable, null);
                 if(val != null)
                 {
                     int result = (int)val;

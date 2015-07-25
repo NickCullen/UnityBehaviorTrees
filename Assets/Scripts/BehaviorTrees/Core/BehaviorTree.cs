@@ -37,6 +37,7 @@ public class BehaviorTree : MonoBehaviour
         //the status of this tree will be whatever the value of the first node was
         mStatus = mCurrent.ReturnValue;
 
+        Debug.Log("BEHAVIOR COMPLETE " + mStatus);
         mCurrent = null;
     }
 
@@ -60,8 +61,6 @@ public class BehaviorTree : MonoBehaviour
      */
     public Coroutine BeginNode(BehaviorNode node)
     {
-        Debug.Log("Beginning " + node);
-
         node.ReturnValue = BehaviorReturn.Running;
 
         //init

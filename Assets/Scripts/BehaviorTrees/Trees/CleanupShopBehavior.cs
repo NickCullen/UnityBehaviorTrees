@@ -17,11 +17,13 @@ public class CleanupShopBehavior : BehaviorTree
         Sequence l2_sequence = new Sequence(l1_RepeatUntilFail);
 
         //level 3
+        Inverter l3_inverter = new Inverter(l2_sequence);
         RepeatUntilFail l3_ruf = new RepeatUntilFail(l2_sequence);
         WalkToObject l3_walkToObject = new WalkToObject(l2_sequence, "Basket");
         DropPOI l3_dropPOI = new DropPOI(l2_sequence);
 
         //level 4
+        IsStackEmpty l4_isStackEmpty = new IsStackEmpty(l3_inverter, "poiStack");
         Sequence l4_sequence = new Sequence(l3_ruf);
 
         //level 5
