@@ -10,6 +10,9 @@ using System.Collections.Generic;
  */
 public class BehaviorTree : MonoBehaviour 
 {
+
+    protected BehaviorNode mRoot = null;        /**< Root node of the behavior tree */
+
     protected BehaviorNode mCurrent = null;       /**< The currently executing node */
 
     protected Dictionary<string, BehaviorVariable> mVariables = new Dictionary<string,BehaviorVariable>();        /**< Variables for this behavior tree */
@@ -17,6 +20,7 @@ public class BehaviorTree : MonoBehaviour
     public BehaviorReturn mStatus = BehaviorReturn.Invalid;
 
     public bool mBehaveOnStart = false;
+
 
     /**
      * Coroutine to begin the BehaviorTree
@@ -42,15 +46,14 @@ public class BehaviorTree : MonoBehaviour
     }
 
     /**
-     * Function which starts the BehaviorTree
-     * @param node The initial root node
+     * Function which starts the BehaviorTree via the root node
      */
-    public void Begin(BehaviorNode node)
+    public void Begin()
     {
-        if(node != null)
+        if(mRoot != null)
         {
             StopAllCoroutines();
-            StartCoroutine(Coroutine_Execute(node));
+            StartCoroutine(Coroutine_Execute(mRoot));
         }
     }
 

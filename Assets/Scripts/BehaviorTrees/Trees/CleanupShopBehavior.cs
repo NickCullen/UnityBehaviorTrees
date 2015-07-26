@@ -8,15 +8,16 @@ public class CleanupShopBehavior : BehaviorTree
 	// Use this for initialization
 	void Start () 
     {
-        RepeatUntilFail rootRepeat = new RepeatUntilFail(null);
+        mRoot = new RepeatUntilFail(null);
 
-        //root
-        Sequence root = new Sequence(rootRepeat);
+        //Level 0 (Not normally a thing but I didnt think it through ...
+        //normally starts at root then level 1 comes next
+        Sequence l0_sequence = new Sequence(mRoot);
 
         //level 1
-        GetStackOfPOIs l1_getStack = new GetStackOfPOIs(root, "poiStack");
-        RepeatUntilFail l1_RepeatUntilFail = new RepeatUntilFail(root);
-        SpawnPOIs l1_spawnPOIs = new SpawnPOIs(root, mPOIPrefab);
+        GetStackOfPOIs l1_getStack = new GetStackOfPOIs(l0_sequence, "poiStack");
+        RepeatUntilFail l1_RepeatUntilFail = new RepeatUntilFail(l0_sequence);
+        SpawnPOIs l1_spawnPOIs = new SpawnPOIs(l0_sequence, mPOIPrefab);
 
         //level 2
         Sequence l2_sequence = new Sequence(l1_RepeatUntilFail);
@@ -40,7 +41,7 @@ public class CleanupShopBehavior : BehaviorTree
         WalkToPOI l6_walkTo = new WalkToPOI(l5_sequence, "item");
         PickupPOI l6_pickup = new PickupPOI(l5_sequence, "item");
 
-        if(mBehaveOnStart) Begin(rootRepeat);
+        if(mBehaveOnStart) Begin();
 	}
 	
 	
