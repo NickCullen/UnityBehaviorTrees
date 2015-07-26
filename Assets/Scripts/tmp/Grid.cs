@@ -95,6 +95,34 @@ public class Grid : MonoBehaviour
         return Instance.mNodes[index];
     }
 
+    public static GridNode GetClosestNode(Vector3 position)
+    {
+        GridNode ret;
+
+        //get a node
+        ret = Instance.mNodes.Find(x => Mathf.Abs(x.mPosition.x - position.x) < 0.1f && Mathf.Abs(x.mPosition.z - position.z) < 0.1f);
+      
+        if (ret != null && ret.mWalkable == false)
+        {
+            if (ret.Up != null && ret.Up.mWalkable)
+                ret = ret.Up;
+            else if (ret.Left != null && ret.Left.mWalkable)
+                ret = ret.Left;
+            else if (ret.Down != null && ret.Down.mWalkable)
+                ret = ret.Down;
+            else if (ret.Right != null && ret.Right.mWalkable)
+                ret = ret.Right;
+            //unreachable node
+            else
+                ret = null;
+
+        }
+        else
+            Debug.Log("Could not find GridNode for position " + position);
+
+        return ret;
+    }
+
     //heuristic cost
     float HeuristicCost(GridNode from, GridNode to)
     {
@@ -128,6 +156,7 @@ public class Grid : MonoBehaviour
             current = cameFrom[current];
             path.Add(current);
         }
+        path.Reverse();
         return path;
     }
 

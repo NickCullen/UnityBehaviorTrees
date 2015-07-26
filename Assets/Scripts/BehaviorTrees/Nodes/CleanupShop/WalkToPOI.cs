@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WalkToPOI : Leaf
 {
     string mPOIVariable = "";
+    List<Grid.GridNode> mPath;
 
     public WalkToPOI(BehaviorNode parent, string poiVariable) : base(parent)
     {
@@ -12,25 +14,33 @@ public class WalkToPOI : Leaf
 
     public override IEnumerator Process(BehaviorTree tree)
     {
-        NavMeshAgent agent = tree.GetComponent<NavMeshAgent>();
         BehaviorVariable poiVar = tree.GetVariable(mPOIVariable);
         GameObject go = poiVar != null ? poiVar.Variable as GameObject : null;
+        NPC npc = tree.GetComponent<NPC>();
 
-        if (agent != null && go != null)
+        if (go && npc)
         {
-            if (agent.SetDestination(go.transform.position))
-            {
-                do
-                {
-                    yield return null;
-                } while (agent.hasPath);
-                    
+            Grid.GridNode goal = Grid.GetClosestNode(go.transform.position);
+            Grid.GridNode myNode = Grid.GetClosestNode(tree.transform.position);
 
-                mReturnValue = BehaviorReturn.Success;
+            if (goal != null && myNode != null)
+            {
+                mPath = Grid.GetPath(myNode, goal);
+                if (mPath.Count > 0)
+                {
+                    for (int i = 0; i < mPath.Count; i++)
+                    {
+                        yield return tree.StartCoroutine(npc.HopTo(mPath[i].mPosition));
+                    }
+
+                    mReturnValue = BehaviorReturn.Success;
+                }
+                else
+                    mReturnValue = BehaviorReturn.Failure;
+
             }
             else
                 mReturnValue = BehaviorReturn.Failure;
-            
         }
         else
             mReturnValue = BehaviorReturn.Failure;

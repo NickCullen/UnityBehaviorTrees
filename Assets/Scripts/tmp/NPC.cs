@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 public class NPC : MonoBehaviour 
 {
+    public float mHopSpeed = 0.5f;
+    public float mHopeHeight = 1.0f;
+
+    public AnimationCurve mHopCurve;
+
     public Transform mPickupSlot1;
     public Transform mPickupSlot2;
 
@@ -22,6 +27,46 @@ public class NPC : MonoBehaviour
         //foreach (Grid.GridNode node in mPath)
         //{
         //    mObjects.Add(Instantiate(mPathObject, node.mPosition, Quaternion.identity) as GameObject);
+        //}
+    }
+
+    Vector3 Interpolate(Vector3 to, Vector3 from, float t)
+    {
+        return (1.0f - t) * from + (to * t);
+    }
+
+    public IEnumerator HopTo(Vector3 pos)
+    {
+        AnimationCurve curve = AnimationCurve.EaseInOut(Time.time, 0.0f, Time.time + mHopSpeed, 1.0f);
+        
+        Vector3 startPos = transform.position;
+        pos.y = startPos.y;
+        Vector3 offset = Vector3.up;
+        float timer = 0.0f;
+        bool moving = true;
+
+        while(moving)
+        {
+            timer += Time.deltaTime;
+            float time = timer / mHopSpeed;
+            transform.position = Vector3.Lerp(startPos, pos + (offset * mHopCurve.Evaluate(time)), time);
+            yield return new WaitForEndOfFrame();
+            if (transform.position == pos)
+            {
+                moving = false;
+            }
+        }
+        
+
+        //float t = 0.0f;
+        //while (t < 1.0f)
+        //{
+        //    //t = curve.Evaluate(Time.time);
+        //    //current = Interpolate(pos,startPos,t);
+        //    //current.y = startY + mHopCurve.Evaluate(Time.time);
+        //    t = mHopCurve.Evaluate(Time.time);
+        //    transform.position = Vector3.Lerp(startPos, pos + (Vector3.up * t), Time.time);
+        //    yield return null;
         //}
     }
 

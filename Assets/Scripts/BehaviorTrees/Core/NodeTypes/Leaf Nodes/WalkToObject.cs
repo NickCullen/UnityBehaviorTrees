@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WalkToObject : Leaf
 {
     private string mObject = "";
+    List<Grid.GridNode> mPath;
 
     public WalkToObject(BehaviorNode parent, string objectName) : base(parent)
     {
@@ -12,24 +14,32 @@ public class WalkToObject : Leaf
 
     public override IEnumerator Process(BehaviorTree tree)
     {
-        NavMeshAgent agent = tree.GetComponent<NavMeshAgent>();
         GameObject go = GameObject.Find(mObject);
+        NPC npc = tree.GetComponent<NPC>();
 
-        if (agent != null && go != null)
+        if (go && npc)
         {
-            if (agent.SetDestination(go.transform.position))
+            Grid.GridNode goal = Grid.GetClosestNode(go.transform.position);
+            Grid.GridNode myNode = Grid.GetClosestNode(tree.transform.position);
+
+            if (goal != null && myNode != null)
             {
-                do
+                mPath = Grid.GetPath(myNode, goal);
+                if (mPath.Count > 0)
                 {
-                    yield return null;
-                } while (agent.hasPath);
+                    for (int i = 0; i < mPath.Count; i++)
+                    {
+                        yield return tree.StartCoroutine(npc.HopTo(mPath[i].mPosition));
+                    }
 
+                    mReturnValue = BehaviorReturn.Success;
+                }
+                else
+                    mReturnValue = BehaviorReturn.Failure;
 
-                mReturnValue = BehaviorReturn.Success;
             }
             else
                 mReturnValue = BehaviorReturn.Failure;
-
         }
         else
             mReturnValue = BehaviorReturn.Failure;
