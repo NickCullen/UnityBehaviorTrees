@@ -33,7 +33,7 @@ public class Grid : MonoBehaviour
             get
             {
                 int index = mMyIndex - Grid.Width;
-                return index < 0 ? null : Grid.Instance.mNodes[index];
+                return index < 0 ? null : Grid.Instance.mNodes[index].mWalkable ? Grid.Instance.mNodes[index] : null;
             }
         }
 
@@ -42,7 +42,7 @@ public class Grid : MonoBehaviour
             get
             {
                 int index = mMyIndex - 1;
-                return mMyIndex % Grid.Width == 0 ? null : Grid.Instance.mNodes[index];
+                return mMyIndex % Grid.Width == 0 ? null : Grid.Instance.mNodes[index].mWalkable ? Grid.Instance.mNodes[index] : null;
             }
         }
 
@@ -51,7 +51,7 @@ public class Grid : MonoBehaviour
             get
             {
                 int index = mMyIndex + Grid.Width;
-                return index >= Grid.mInstance.mNodes.Count ? null : Grid.Instance.mNodes[index];
+                return index >= Grid.mInstance.mNodes.Count ? null : Grid.Instance.mNodes[index].mWalkable ? Grid.Instance.mNodes[index] : null;
             }
         }
         public GridNode Up
@@ -59,15 +59,27 @@ public class Grid : MonoBehaviour
             get 
             {
                 int index = mMyIndex + 1;
-                return index % Grid.Width == 0 ? null : Grid.Instance.mNodes[index];
+                return index % Grid.Width == 0 ? null : Grid.Instance.mNodes[index].mWalkable ? Grid.Instance.mNodes[index] : null;
             }
         }     
+
+        public List<GridNode> Neighbours
+        {
+            get
+            {
+                List<GridNode> neighbours = new List<GridNode>();
+                if (Left != null) neighbours.Add(Left);
+                if (Down != null) neighbours.Add(Down);
+                if (Right != null) neighbours.Add(Right);
+                if (Up != null) neighbours.Add(Up);
+                return neighbours;
+            }
+        }
     }
 
     private static Grid mInstance = null;
 
     //list of grid nodes for navigation
-    [HideInInspector()]
     public List<GridNode> mNodes = new List<GridNode>();
     
     //width and height of grid
@@ -77,6 +89,99 @@ public class Grid : MonoBehaviour
     {
         mInstance = this;
     }
+
+    public static GridNode GetNode(int index)
+    {
+        return Instance.mNodes[index];
+    }
+
+    //heuristic cost
+    float HeuristicCost(GridNode from, GridNode to)
+    {
+        return Vector3.SqrMagnitude(from.mPosition - to.mPosition);
+    }
+
+    GridNode GetLowestFromList(Dictionary<GridNode, float> map)
+    {
+        float lowest = 100000;
+        GridNode ret = null;
+        foreach (KeyValuePair<GridNode, float> entry in map)
+        {
+            if(entry.Value < lowest)
+            {
+                lowest = entry.Value;
+                ret = entry.Key;
+            }
+        }
+
+        map.Remove(ret);
+        return ret;
+    }
+
+    public List<GridNode> ReconstructPath(Dictionary<GridNode, GridNode> cameFrom, GridNode current)
+    {
+        List<GridNode> path = new List<GridNode>();
+        path.Add(current);
+
+        while(cameFrom.ContainsKey(current))
+        {
+            current = cameFrom[current];
+            path.Add(current);
+        }
+        return path;
+    }
+
+    //A* search
+    public static List<GridNode> GetPath(GridNode start, GridNode goal)
+    {
+        List<GridNode> closedSet = new List<GridNode>(); //list if set of nodes already evaluated
+        List<GridNode> openSet = new List<GridNode>();  //the set of tentative nodes to be evaluated, initially
+        openSet.Add(start);
+        Dictionary<GridNode,GridNode> cameFrom = new Dictionary<GridNode,GridNode>(); //The map of navigated nodes
+
+        //cost from start along best known path
+        Dictionary<GridNode, float> g_score = new Dictionary<GridNode, float>();
+        g_score[start] = 0.0f;
+
+        //estimated total cost from start to goal through y
+        Dictionary<GridNode, float> f_score = new Dictionary<GridNode, float>();
+        f_score[start] = g_score[start] + Instance.HeuristicCost(start, goal);
+
+        GridNode current = null;
+        while(openSet.Count > 0)
+        {
+            current = Instance.GetLowestFromList(f_score);
+            if (current == goal)
+                return Instance.ReconstructPath(cameFrom, goal);
+
+            openSet.Remove(current);
+            closedSet.Add(current);
+
+            foreach(GridNode neighbor in current.Neighbours)
+            {
+                if (closedSet.Contains(neighbor))
+                    continue;
+
+                float tentative_g_score = g_score[current] + Vector3.SqrMagnitude(current.mPosition - neighbor.mPosition);
+                
+                if(!openSet.Contains(neighbor) || tentative_g_score < g_score[neighbor])
+                {
+                    cameFrom[neighbor] = current;
+                    g_score[neighbor] = tentative_g_score;
+                    f_score[neighbor] = g_score[neighbor] + Instance.HeuristicCost(neighbor, goal);
+
+                    if(!openSet.Contains(neighbor))
+                    {
+                        openSet.Add(neighbor);
+                    }
+                }
+            }
+        }
+
+        return new List<GridNode>();
+    }
+
+
 
     #region - PROPERTIES -
 
@@ -138,23 +243,6 @@ public class Grid : MonoBehaviour
 
     public GameObject mWalkablePrefab;
     public GameObject mNotWalkablePrefab;
-
-    public GridNode mSelectedNode;
-
-    void OnDrawGizmos()
-    {
-        if(mSelectedNode != null)
-        {
-            Gizmos.color = Color.red;
-            if (mSelectedNode.Left != null) Gizmos.DrawSphere(mSelectedNode.Left.mPosition, 0.25f);
-            Gizmos.color = Color.green;
-            if (mSelectedNode.Down != null) Gizmos.DrawSphere(mSelectedNode.Down.mPosition, 0.25f);
-            Gizmos.color = Color.blue;
-            if (mSelectedNode.Right != null) Gizmos.DrawSphere(mSelectedNode.Right.mPosition, 0.25f);
-            Gizmos.color = Color.yellow;
-            if(mSelectedNode.Up != null) Gizmos.DrawSphere(mSelectedNode.Up.mPosition, 0.25f);
-        }
-    }
 
     public void GenerateGrid()
     {

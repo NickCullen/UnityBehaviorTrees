@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+#pragma warning disable 219
+
 /**
  * BehaviorTree component that will attach to a GameObject
  * All MonoBehavior functions must be accessed through this 

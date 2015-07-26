@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+#pragma warning disable 219
+
 public class CleanupShopBehavior : BehaviorTree
 {
     public GameObject mPOIPrefab;

@@ -77,7 +77,6 @@ public class GridEditor : EditorWindow
     //generates grid
     private void GenerateGrid()
     {
-        mGrid.mSelectedNode = null;
         mGrid.mSize = mGridSize;
         mGrid.DisplayGrid = false;
         mGrid.GenerateGrid();
@@ -89,13 +88,11 @@ public class GridEditor : EditorWindow
         if (mGrid)
         {
             mGrid.DisplayGrid = false;
-            mGrid.mSelectedNode = null;
         }
     }
     //reners options for selected node
     private void RenderSelectedNodeOptions(Grid.GridNode node)
     {
-        mGrid.mSelectedNode = node;
         bool tmp = EditorGUILayout.Toggle("Selected node is walkable", node.mWalkable);
         //they have swapped
         if(tmp != node.mWalkable)
