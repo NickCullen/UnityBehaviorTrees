@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Linq;
 
+/**
+ * Same function as normal Selector except the order of
+ * processing is randomised
+ */
 public class RandomSelector : Composite
 {
     public RandomSelector(BehaviorNode parent) : base(parent)
@@ -29,10 +33,7 @@ public class RandomSelector : Composite
         {
             yield return tree.BeginNode(mChildren[i]);
 
-            //remember to call OnComplete
-            mChildren[i].OnComplete(tree);
-
-            if (mChildren[i].ReturnValue == BehaviorReturn.Success)
+            if (mChildren[i].mReturnValue == BehaviorReturn.Success)
             {
                 //change to success if one of them sucesses and break
                 mReturnValue = BehaviorReturn.Success;

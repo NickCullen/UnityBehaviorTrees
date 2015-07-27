@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * A sequence will visit each child in order, starting with the 
+ * first, and when that succeeds will call the second, and 
+ * so on down the list of children. If any child fails it will 
+ * immediately return failure to the parent. If the last child in 
+ * the sequence succeeds, then the sequence will return success to 
+ * its parent. 
+ */
 public class Sequence : Composite
 {
     public Sequence(BehaviorNode parent) : base(parent)
@@ -18,10 +26,7 @@ public class Sequence : Composite
         {
             yield return tree.BeginNode(mChildren[i]);
 
-            //remember to call OnComplete
-            mChildren[i].OnComplete(tree);
-
-            if (mChildren[i].ReturnValue == BehaviorReturn.Failure)
+            if (mChildren[i].mReturnValue == BehaviorReturn.Failure)
             {
                 //change to failer if one of them fail and break
                 mReturnValue = BehaviorReturn.Failure;

@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Like a repeater, these decorators will continue to reprocess 
+ * their child. That is until the child finally returns a failure, 
+ * at which point the repeater will return success to its parent. 
+ */
 public class RepeatUntilFail : Decorator
 {
     public RepeatUntilFail(BehaviorNode parent) : base(parent)
@@ -17,8 +22,7 @@ public class RepeatUntilFail : Decorator
             {
                 yield return tree.BeginNode(mChild);
 
-                mChild.OnComplete(tree);
-            } while (mChild.ReturnValue != BehaviorReturn.Failure);
+            } while (mChild.mReturnValue != BehaviorReturn.Failure);
         }
         else
             yield return null;

@@ -38,10 +38,8 @@ public class BehaviorTree : MonoBehaviour
 
         yield return BeginNode(mCurrent);
 
-        mCurrent.OnComplete(this);
-
         //the status of this tree will be whatever the value of the first node was
-        mStatus = mCurrent.ReturnValue;
+        mStatus = mCurrent.mReturnValue;
 
         Debug.Log("BEHAVIOR COMPLETE " + mStatus);
         mCurrent = null;
@@ -66,10 +64,7 @@ public class BehaviorTree : MonoBehaviour
      */
     public Coroutine BeginNode(BehaviorNode node)
     {
-        node.ReturnValue = BehaviorReturn.Running;
-
-        //init
-        node.OnStart(this);
+        node.mReturnValue = BehaviorReturn.Running;
 
         //process
         return StartCoroutine(node.Process(this));

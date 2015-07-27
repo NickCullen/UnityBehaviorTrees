@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Linq;
 
+/**
+ * Same function as normal Sequence node except the order of
+ * processing is randomised
+ */
 public class RandomSequence : Composite
 {
     public RandomSequence(BehaviorNode parent) : base(parent)
@@ -29,10 +33,7 @@ public class RandomSequence : Composite
         {
             yield return tree.BeginNode(mChildren[i]);
 
-            //remember to call OnComplete
-            mChildren[i].OnComplete(tree);
-
-            if (mChildren[i].ReturnValue == BehaviorReturn.Failure)
+            if (mChildren[i].mReturnValue == BehaviorReturn.Failure)
             {
                 //change to failer if one of them fail and break
                 mReturnValue = BehaviorReturn.Failure;

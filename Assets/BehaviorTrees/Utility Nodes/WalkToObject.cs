@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class WalkToObject : Leaf
 {
     private string mObject = "";
-    List<Grid.GridNode> mPath;
+    List<GridNode> mPath;
 
     public WalkToObject(BehaviorNode parent, string objectName) : base(parent)
     {
@@ -19,8 +19,8 @@ public class WalkToObject : Leaf
 
         if (go && npc)
         {
-            Grid.GridNode goal = Grid.GetClosestNode(go.transform.position);
-            Grid.GridNode myNode = Grid.GetClosestNode(tree.transform.position);
+            GridNode goal = Grid.GetClosestNode(go.transform.position);
+            GridNode myNode = Grid.GetClosestNode(tree.transform.position);
 
             if (goal != null && myNode != null)
             {

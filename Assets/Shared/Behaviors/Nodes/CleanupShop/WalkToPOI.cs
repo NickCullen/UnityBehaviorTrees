@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class WalkToPOI : Leaf
 {
     string mPOIVariable = "";
-    List<Grid.GridNode> mPath;
+    List<GridNode> mPath;
 
     public WalkToPOI(BehaviorNode parent, string poiVariable) : base(parent)
     {
@@ -20,8 +20,8 @@ public class WalkToPOI : Leaf
 
         if (go && npc)
         {
-            Grid.GridNode goal = Grid.GetClosestNode(go.transform.position);
-            Grid.GridNode myNode = Grid.GetClosestNode(tree.transform.position);
+            GridNode goal = Grid.GetClosestNode(go.transform.position);
+            GridNode myNode = Grid.GetClosestNode(tree.transform.position);
 
             if (goal != null && myNode != null)
             {

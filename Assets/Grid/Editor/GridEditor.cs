@@ -62,7 +62,7 @@ public class GridEditor : EditorWindow
             {
                 foreach (GameObject go in selectedNodes)
                 {
-                    Grid.GridNode gn = mGrid.ObjectToGridNode(go);
+                    GridNode gn = mGrid.ObjectToGridNode(go);
                     if (gn != null) RenderSelectedNodeOptions(gn);
                 }
             }               
@@ -91,7 +91,7 @@ public class GridEditor : EditorWindow
         }
     }
     //reners options for selected node
-    private void RenderSelectedNodeOptions(Grid.GridNode node)
+    private void RenderSelectedNodeOptions(GridNode node)
     {
         bool tmp = EditorGUILayout.Toggle("Selected node is walkable", node.mWalkable);
         //they have swapped

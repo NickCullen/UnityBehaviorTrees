@@ -12,7 +12,7 @@ public class NPC : MonoBehaviour
     public Transform mPickupSlot1;
     public Transform mPickupSlot2;
 
-    public List<Grid.GridNode> mPath;
+    public List<GridNode> mPath;
 
     public GameObject mPathObject;
     private List<GameObject> mObjects = new List<GameObject>();
@@ -93,7 +93,7 @@ public class NPC : MonoBehaviour
                 mObjects.Clear();
 
                 //show path
-                foreach (Grid.GridNode node in mPath)
+                foreach (GridNode node in mPath)
                 {
                     mObjects.Add(Instantiate(mPathObject, node.mPosition, Quaternion.identity) as GameObject);
                 }

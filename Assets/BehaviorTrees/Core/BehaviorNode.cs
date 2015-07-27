@@ -20,28 +20,11 @@ public class BehaviorNode
         }
     }
 
-    protected BehaviorReturn mReturnValue = BehaviorReturn.Invalid; /**< as process is ran in coroutines returning a BehaviorReturn type is not allowed. So we store it here and check it with ReturnValue property */
+    public BehaviorReturn mReturnValue = BehaviorReturn.Invalid; /**< as process is ran in coroutines returning a BehaviorReturn type is not allowed. So we store it here and check it with ReturnValue property */
 
     /**
-     * Called once before process
-     */
-    public virtual void OnStart(BehaviorTree tree) { }
-
-    /**
-     * Called once per frame
+     * Called once and its a coroutine so you have the OnStart/OnEnd built in!
      */
     public virtual IEnumerator Process(BehaviorTree tree) { yield return null; }
 
-    /**
-     * Called once, after process does not return Running
-     */
-    public virtual void OnComplete(BehaviorTree tree) { }
-
-#region - PROPERTIES -
-    public BehaviorReturn ReturnValue
-    {
-        set { mReturnValue = value; }
-        get { return mReturnValue; }
-    }
-#endregion
 }
