@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Checks if the object on the Behaviors variable map
+ * is null. Will return Success if it is null/non-existant
+ * false otherwise.
+ */
 public class IsNullObject : Leaf
 {
     string mObject;

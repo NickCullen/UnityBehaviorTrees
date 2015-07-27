@@ -3,7 +3,9 @@ using System.Collections;
 using System.Reflection;
 
 /**
- * Returns success or fail depending weither or not mStack is empty or not
+ * Checks to see if the stack on the Behaviors variable map is empty
+ * will return Success if it is empty or non-existant. will return
+ * false otherwise
  */
 public class IsStackEmpty : Leaf
 {

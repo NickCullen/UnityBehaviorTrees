@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Takes the string id you want the object to be set to
+ * and the object itself.
+ * If both are present it will push it onto the trees Behavior Variable 
+ * map and return Success. Failure otherwise.
+ */
 public class SetVariable : Leaf
 {
     string mID;

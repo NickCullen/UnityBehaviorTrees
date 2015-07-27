@@ -4,7 +4,10 @@ using System.Reflection;
 using System;
 
 /**
- * Removes object from stack
+ * Removes an object from the stack that is on the Behaviors
+ * variable map and stores it into a variable with the given id.
+ * This variable is then placed back on the Behaviors variable map
+ * Returns Success if the object was found and added. Failure otherwise
  */
 public class PopFromStack : Leaf 
 {
