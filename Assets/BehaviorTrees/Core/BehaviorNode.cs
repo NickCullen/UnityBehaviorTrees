@@ -4,6 +4,9 @@ using System.Collections;
 /**
  * Base class all Behavior nodes derive from
  * contains helpful methods to simplify code
+ * All comments you see on classes inheriting from BehaviorNode
+ * comes from the lovely article written by Chris Simpson on Gamasutra
+ * http://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
  */
 public class BehaviorNode
 {
