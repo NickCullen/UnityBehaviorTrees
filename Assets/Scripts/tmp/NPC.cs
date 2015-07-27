@@ -47,14 +47,19 @@ public class NPC : MonoBehaviour
 
         while(moving)
         {
+            
             timer += Time.deltaTime;
             float time = timer / mHopSpeed;
-            transform.position = Vector3.Lerp(startPos, pos + (offset * mHopCurve.Evaluate(time)), time);
-            yield return new WaitForEndOfFrame();
-            if (transform.position == pos)
+
+            if (time > 1.0f)
             {
                 moving = false;
+                break;
             }
+
+            transform.position = Vector3.Lerp(startPos, pos + (offset * mHopCurve.Evaluate(time)), time);
+            yield return new WaitForEndOfFrame();
+            
         }
         
 

@@ -28,9 +28,13 @@ public class WalkToPOI : Leaf
                 mPath = Grid.GetPath(myNode, goal);
                 if (mPath.Count > 0)
                 {
+                    
                     for (int i = 0; i < mPath.Count; i++)
                     {
-                        yield return tree.StartCoroutine(npc.HopTo(mPath[i].mPosition));
+                        Vector3 pos = mPath[i].mPosition;
+                        pos.y = tree.transform.position.y;
+                        tree.transform.LookAt(pos);
+                        yield return tree.StartCoroutine(npc.HopTo(pos));
                     }
 
                     mReturnValue = BehaviorReturn.Success;
