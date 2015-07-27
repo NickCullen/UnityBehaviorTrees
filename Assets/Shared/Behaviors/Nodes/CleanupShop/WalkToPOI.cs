@@ -20,7 +20,7 @@ public class WalkToPOI : Leaf
 
         if (go && npc)
         {
-            GridNode goal = Grid.GetClosestNode(go.transform.position);
+            GridNode goal = Grid.GetClosestNode(go.transform.position, tree.transform.position);
             GridNode myNode = Grid.GetClosestNode(tree.transform.position);
 
             if (goal != null && myNode != null)
@@ -34,7 +34,9 @@ public class WalkToPOI : Leaf
                         Vector3 pos = mPath[i].mPosition;
                         pos.y = tree.transform.position.y;
                         tree.transform.LookAt(pos);
-                        yield return tree.StartCoroutine(npc.HopTo(pos));
+                        tree.transform.position = pos;
+                        yield return new WaitForSeconds(0.5f);
+                        //yield return tree.StartCoroutine(npc.HopTo(pos));
                     }
 
                     mReturnValue = BehaviorReturn.Success;

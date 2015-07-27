@@ -6,8 +6,17 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
+/**
+ * Grid Singleton used for path finding amoungst the 
+ * grid nodes. To be used with the Grid Editor to generate
+ * the list of GridNodes
+ */
 public class Grid : MonoBehaviour 
 {
+    //cached rogue value vector
+    private static Vector3 ROGUE_VECTOR = new Vector3(-989,989,-989);
+
+    //the current singleton instance. If another is created - the old will be destroyed.
     private static Grid mInstance = null;
 
     //list of grid nodes for navigation
@@ -18,34 +27,131 @@ public class Grid : MonoBehaviour
 
     void Awake()
     {
+        if (mInstance != null)
+            Destroy(mInstance);
         mInstance = this;
     }
 
+    /**
+     * Get node via Index
+     */
     public static GridNode GetNode(int index)
     {
         return Instance.mNodes[index];
     }
 
+    /**
+     * Returns the closest node to the given position. An overloaded argument may
+     * be given so that it will also return the closest node relative to that.
+     */
     public static GridNode GetClosestNode(Vector3 position)
     {
+        return GetClosestNode(position, ROGUE_VECTOR);
+    }
+
+    /**
+     * Overloaded method will return the closts node relative to FROM. 
+     * Will ignor from if it equals ROGUE_VECTOR
+     */
+    public static GridNode GetClosestNode(Vector3 position, Vector3 from)
+    {
         GridNode ret;
+
+        bool rogue = from == ROGUE_VECTOR;
+        float lastDistance = 999999.9f;
+        float heuristic;
 
         //get a node
         ret = Instance.mNodes.Find(x => Mathf.Abs(x.mPosition.x - position.x) < 0.1f && Mathf.Abs(x.mPosition.z - position.z) < 0.1f);
       
+
+        //if it was found and walkable do the checks
         if (ret != null && ret.mWalkable == false)
         {
+            //need to check if it changed
+            GridNode tmp = ret;
+
+            //Up
             if (ret.Up != null && ret.Up.mWalkable)
-                ret = ret.Up;
-            else if (ret.Left != null && ret.Left.mWalkable)
-                ret = ret.Left;
-            else if (ret.Down != null && ret.Down.mWalkable)
-                ret = ret.Down;
-            else if (ret.Right != null && ret.Right.mWalkable)
-                ret = ret.Right;
-            //unreachable node
+            {
+                if(!rogue)
+                {
+                    heuristic = Instance.HeuristicCost(ret.Up.mPosition, from);
+                    if(heuristic < lastDistance)
+                    {
+                        tmp = ret.Up;
+                        lastDistance = heuristic;
+                    }
+                }
+                else
+                {
+                    return ret.Up;
+                }
+                
+            }
+
+            //Left
+            if (ret.Left != null && ret.Left.mWalkable)
+            {
+                if (!rogue)
+                {
+                    heuristic = Instance.HeuristicCost(ret.Left.mPosition, from);
+                    if (heuristic < lastDistance)
+                    {
+                        tmp = ret.Left;
+                        lastDistance = heuristic;
+                    }
+                }
+                else
+                {
+                    return ret.Left;
+                }
+
+            }
+
+            //Down
+            if (ret.Down != null && ret.Down.mWalkable)
+            {
+                if (!rogue)
+                {
+                    heuristic = Instance.HeuristicCost(ret.Down.mPosition, from);
+                    if (heuristic < lastDistance)
+                    {
+                        tmp = ret.Down;
+                        lastDistance = heuristic;
+                    }
+                }
+                else
+                {
+                    return ret.Down;
+                }
+
+            }
+
+            //Right
+            if (ret.Right != null && ret.Right.mWalkable)
+            {
+                if (!rogue)
+                {
+                    heuristic = Instance.HeuristicCost(ret.Right.mPosition, from);
+                    if (heuristic < lastDistance)
+                    {
+                        tmp = ret.Right;
+                        lastDistance = heuristic;
+                    }
+                }
+                else
+                {
+                    return ret.Right;
+                }
+
+            }
+
+            //if it didnt change then that means it is unreachable
+            if (tmp != ret)
+                ret = tmp;
             else
-                ret = null;
+                return null;
 
         }
         else
@@ -55,9 +161,9 @@ public class Grid : MonoBehaviour
     }
 
     //heuristic cost
-    float HeuristicCost(GridNode from, GridNode to)
+    float HeuristicCost(Vector3 from, Vector3 to)
     {
-        return Vector3.SqrMagnitude(from.mPosition - to.mPosition);
+        return Vector3.SqrMagnitude(from - to);
     }
 
     GridNode GetLowestFromList(Dictionary<GridNode, float> map)
@@ -105,7 +211,7 @@ public class Grid : MonoBehaviour
 
         //estimated total cost from start to goal through y
         Dictionary<GridNode, float> f_score = new Dictionary<GridNode, float>();
-        f_score[start] = g_score[start] + Instance.HeuristicCost(start, goal);
+        f_score[start] = g_score[start] + Instance.HeuristicCost(start.mPosition, goal.mPosition);
 
         GridNode current = null;
         while(openSet.Count > 0)
@@ -128,7 +234,7 @@ public class Grid : MonoBehaviour
                 {
                     cameFrom[neighbor] = current;
                     g_score[neighbor] = tentative_g_score;
-                    f_score[neighbor] = g_score[neighbor] + Instance.HeuristicCost(neighbor, goal);
+                    f_score[neighbor] = g_score[neighbor] + Instance.HeuristicCost(neighbor.mPosition, goal.mPosition);
 
                     if(!openSet.Contains(neighbor))
                     {
