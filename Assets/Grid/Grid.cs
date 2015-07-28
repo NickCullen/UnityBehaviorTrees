@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using System.Linq;
 #endif
 
 /**
@@ -24,6 +25,11 @@ public class Grid : MonoBehaviour
     
     //width and height of grid
     public int mSize = 10;
+
+    //snap values of the grid
+    private float mSnapX = 1.0f;
+    private float mSnapY = 1.0f;
+    private float mSnapZ = 1.0f;
 
     void Awake()
     {
@@ -307,8 +313,9 @@ public class Grid : MonoBehaviour
     //parent of mObjects
     GameObject mParent;
 
-    public GameObject mWalkablePrefab;
-    public GameObject mNotWalkablePrefab;
+    public GameObject mVisualNodePrefab;
+    public Material mWalkableMaterial;
+    public Material mNonWalkableMaterial;
 
     public void GenerateGrid()
     {
@@ -319,34 +326,91 @@ public class Grid : MonoBehaviour
         Vector3 start = new Vector3(-halfSize, 0, -halfSize);
         Vector3 end = new Vector3(halfSize, 0, halfSize);
 
-        float snapX = EditorPrefs.GetFloat("MoveSnapX");
-        float snapZ = EditorPrefs.GetFloat("MoveSnapZ");
+        mSnapX = EditorPrefs.GetFloat("MoveSnapX");
+        mSnapY = EditorPrefs.GetFloat("MoveSnapY");
+        mSnapZ = EditorPrefs.GetFloat("MoveSnapZ");
 
         float tmpZ = start.z;
 
-        for (; start.x < end.x; start.x += snapX)
+        for (; start.x < end.x; start.x += mSnapX)
         {
-            for (start.z = tmpZ; start.z < end.z; start.z += snapZ)
+            for (start.z = tmpZ; start.z < end.z; start.z += mSnapZ)
             {
                 GridNode node = new GridNode(start);
                 node.mMyIndex = mNodes.Count;
                 mNodes.Add(node);
             }
         }
+
+        //display them
+        DisplayObjects(true);
+        mDisplayGrid = true;
     }
 
-    public void DisplayObjects()
+    public GameObject [] FindGameObjectsWithLayer(string layerName) 
+    {
+        int layer = LayerMask.NameToLayer(layerName);
+        GameObject [] allGameObjects = FindObjectsOfType<GameObject>();
+        List<GameObject> retList = new List<GameObject>();
+        for (var i = 0; i < allGameObjects.Length; i++)
+        {
+            if (allGameObjects[i].layer == layer) {
+                retList.Add(allGameObjects[i]);
+            }
+        }
+
+        return retList.Count > 0 ? retList.ToArray() : null;
+    }
+
+    public void DisplayObjects(bool fromGenerating = false)
     {
         //if any are displayed we first need to destroy them!
         HideObjects();
 
         mParent = new GameObject("Temp Grid Nodes");
-        
+
+        GameObject[] nonWalkables = FindGameObjectsWithLayer("NonWalkable");
+        Bounds[] nonWalkableBounds = null;
+        if(nonWalkables != null)
+        {
+            nonWalkableBounds = new Bounds[nonWalkables.Length];
+            for(int i = 0; i < nonWalkables.Length; i++)
+            {
+                Renderer ren = nonWalkables[i].GetComponent<Renderer>();
+                nonWalkableBounds[i] = ren != null ? ren.bounds : new Bounds(new Vector3(-999999, -99999, -999999), Vector3.zero);
+            }
+        }
+
         foreach(GridNode node in mNodes)
         {
-            GameObject go = Instantiate(node.mWalkable ? mWalkablePrefab : mNotWalkablePrefab, node.mPosition, Quaternion.identity) as GameObject;
+            GameObject go = Instantiate(mVisualNodePrefab, node.mPosition, Quaternion.identity) as GameObject;
             go.transform.parent = mParent.transform;
             go.tag = "NavigationNode";
+
+            //if this is the first time this node is being generated we want to see if it is inside another collider
+            //this is so we can set it to non-walkable
+            if(fromGenerating && nonWalkableBounds != null)
+            {
+                Renderer ren = go.GetComponent<Renderer>();
+                for (int i = 0; i < nonWalkableBounds.Length; i++ )
+                {
+                    if (ren.bounds.Intersects(nonWalkableBounds[i]))
+                    {
+                        node.mWalkable = false;
+                        ren.sharedMaterial = mNonWalkableMaterial;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if(node.mWalkable != true)
+                {
+                    Renderer ren = go.GetComponent<Renderer>();
+                    ren.sharedMaterial = mNonWalkableMaterial;
+                }
+            }
+
             mObjects.Add(go);
         }
     }
@@ -355,6 +419,15 @@ public class Grid : MonoBehaviour
     {
         if (mParent)
             DestroyImmediate(mParent);
+
+        //make sure all previous nodes are deleted
+        GameObject leakedObject = GameObject.Find("Temp Grid Nodes");
+        while(leakedObject != null)
+        {
+            DestroyImmediate(leakedObject);
+            leakedObject = GameObject.Find("Temp Grid Nodes");
+        }
+
         mObjects.Clear();
     }
 

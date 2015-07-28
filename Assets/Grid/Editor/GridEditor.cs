@@ -79,8 +79,8 @@ public class GridEditor : EditorWindow
     {
         mGrid.mSize = mGridSize;
         mGrid.DisplayGrid = false;
-        mGrid.GenerateGrid();
-        mGrid.DisplayGrid = true;
+        mGrid.GenerateGrid();   //generating will display objects
+
     }
 
     void OnDestroy()
@@ -102,11 +102,11 @@ public class GridEditor : EditorWindow
             {
                 if(tmp)
                 {
-                    go.GetComponent<Renderer>().sharedMaterial = mGrid.mWalkablePrefab.GetComponent<Renderer>().sharedMaterial;
+                    go.GetComponent<Renderer>().sharedMaterial = mGrid.mWalkableMaterial;
                 }
                 else
                 {
-                    go.GetComponent<Renderer>().sharedMaterial = mGrid.mNotWalkablePrefab.GetComponent<Renderer>().sharedMaterial;
+                    go.GetComponent<Renderer>().sharedMaterial = mGrid.mNonWalkableMaterial;
                 }
             }
         }
