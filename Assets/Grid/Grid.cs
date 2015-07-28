@@ -20,7 +20,7 @@ public class Grid : MonoBehaviour
     //the current singleton instance. If another is created - the old will be destroyed.
     private static Grid mInstance = null;
 
-    //list of grid nodes for navigation
+    //list of serialized grid nodes for navigation in this grid
     public List<GridNode> mNodes = new List<GridNode>();
     
     //width and height of grid
@@ -38,9 +38,6 @@ public class Grid : MonoBehaviour
         mInstance = this;
     }
 
-    /**
-     * Get node via Index
-     */
     public static GridNode GetNode(int index)
     {
         return Instance.mNodes[index];
@@ -56,8 +53,8 @@ public class Grid : MonoBehaviour
     }
 
     /**
-     * Overloaded method will return the closts node relative to FROM. 
-     * Will ignor from if it equals ROGUE_VECTOR
+     * Overloaded method will return the closest node relative to FROM. 
+     * Will ignore 'from' if it equals ROGUE_VECTOR
      */
     public static GridNode GetClosestNode(Vector3 position, Vector3 from)
     {
@@ -90,10 +87,7 @@ public class Grid : MonoBehaviour
                     }
                 }
                 else
-                {
-                    return ret.Up;
-                }
-                
+                    return ret.Up;                
             }
 
             //Left
@@ -109,10 +103,7 @@ public class Grid : MonoBehaviour
                     }
                 }
                 else
-                {
                     return ret.Left;
-                }
-
             }
 
             //Down
@@ -128,10 +119,7 @@ public class Grid : MonoBehaviour
                     }
                 }
                 else
-                {
                     return ret.Down;
-                }
-
             }
 
             //Right
@@ -147,18 +135,11 @@ public class Grid : MonoBehaviour
                     }
                 }
                 else
-                {
                     return ret.Right;
-                }
-
             }
 
             //if it didnt change then that means it is unreachable
-            if (tmp != ret)
-                ret = tmp;
-            else
-                return null;
-
+            ret = tmp != ret ? tmp : null;
         }
 
         return ret;
@@ -204,6 +185,7 @@ public class Grid : MonoBehaviour
     //A* search
     public static List<GridNode> GetPath(GridNode start, GridNode goal)
     {
+        
         List<GridNode> closedSet = new List<GridNode>(); //list if set of nodes already evaluated
         List<GridNode> openSet = new List<GridNode>();  //the set of tentative nodes to be evaluated, initially
         openSet.Add(start);

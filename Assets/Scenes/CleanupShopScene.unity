@@ -160,7 +160,16 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6584100, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6575546, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6580948, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6545060, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6510682, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6573372, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6572372, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6551956, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
+    - {fileID: 6516860, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 932612d9ff087714db7d0910fd72ea65, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &490255559
@@ -257,9 +266,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 656915023}
   - 33: {fileID: 656915022}
-  - 65: {fileID: 656915021}
   - 23: {fileID: 656915020}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Isle 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -290,18 +298,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &656915021
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 656915019}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &656915022
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -390,7 +386,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 727574149}
   - 33: {fileID: 727574148}
-  - 136: {fileID: 727574147}
   - 23: {fileID: 727574146}
   - 114: {fileID: 727574145}
   - 114: {fileID: 727574151}
@@ -439,19 +434,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!136 &727574147
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 727574144}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: .5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &727574148
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -519,7 +501,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 734333165}
   - 33: {fileID: 734333164}
-  - 64: {fileID: 734333163}
   - 23: {fileID: 734333162}
   m_Layer: 0
   m_Name: Plane
@@ -552,18 +533,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!64 &734333163
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 734333161}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Convex: 0
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &734333164
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -592,9 +561,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 761415994}
   - 33: {fileID: 761415993}
-  - 65: {fileID: 761415992}
   - 23: {fileID: 761415991}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basket
   m_TagString: Basket
   m_Icon: {fileID: 0}
@@ -625,18 +593,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &761415992
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 761415990}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &761415993
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -763,25 +719,25 @@ MonoBehaviour:
     mWalkable: 1
     mMyIndex: 21
   - mPosition: {x: -3, y: 0, z: -3}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 22
   - mPosition: {x: -3, y: 0, z: -2}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 23
   - mPosition: {x: -3, y: 0, z: -1}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 24
   - mPosition: {x: -3, y: 0, z: 0}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 25
   - mPosition: {x: -3, y: 0, z: 1}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 26
   - mPosition: {x: -3, y: 0, z: 2}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 27
   - mPosition: {x: -3, y: 0, z: 3}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 28
   - mPosition: {x: -3, y: 0, z: 4}
     mWalkable: 1
@@ -823,25 +779,25 @@ MonoBehaviour:
     mWalkable: 1
     mMyIndex: 41
   - mPosition: {x: -1, y: 0, z: -3}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 42
   - mPosition: {x: -1, y: 0, z: -2}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 43
   - mPosition: {x: -1, y: 0, z: -1}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 44
   - mPosition: {x: -1, y: 0, z: 0}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 45
   - mPosition: {x: -1, y: 0, z: 1}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 46
   - mPosition: {x: -1, y: 0, z: 2}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 47
   - mPosition: {x: -1, y: 0, z: 3}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 48
   - mPosition: {x: -1, y: 0, z: 4}
     mWalkable: 1
@@ -883,25 +839,25 @@ MonoBehaviour:
     mWalkable: 1
     mMyIndex: 61
   - mPosition: {x: 1, y: 0, z: -3}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 62
   - mPosition: {x: 1, y: 0, z: -2}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 63
   - mPosition: {x: 1, y: 0, z: -1}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 64
   - mPosition: {x: 1, y: 0, z: 0}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 65
   - mPosition: {x: 1, y: 0, z: 1}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 66
   - mPosition: {x: 1, y: 0, z: 2}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 67
   - mPosition: {x: 1, y: 0, z: 3}
-    mWalkable: 1
+    mWalkable: 0
     mMyIndex: 68
   - mPosition: {x: 1, y: 0, z: 4}
     mWalkable: 1
@@ -997,8 +953,10 @@ MonoBehaviour:
     mWalkable: 1
     mMyIndex: 99
   mSize: 10
-  mWalkablePrefab: {fileID: 179544, guid: 14eb3d8a2715c2642a32a658a8f7a876, type: 2}
-  mNotWalkablePrefab: {fileID: 117564, guid: 3b2f24a36fb3eeb408a80667ddd7bd96, type: 2}
+  mVisualNodePrefab: {fileID: 179544, guid: 14eb3d8a2715c2642a32a658a8f7a876, type: 2}
+  mWalkableMaterial: {fileID: 2100000, guid: 97ebdd7269f6182469abdf8036070f61, type: 2}
+  mNonWalkableMaterial: {fileID: 2100000, guid: 92501a2798c729f48b1fd79d4dca7ec0,
+    type: 2}
 --- !u!1 &1670003036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,9 +966,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 1670003040}
   - 33: {fileID: 1670003039}
-  - 65: {fileID: 1670003038}
   - 23: {fileID: 1670003037}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Isle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1041,18 +998,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &1670003038
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1670003036}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1670003039
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1108,9 +1053,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 2006135672}
   - 33: {fileID: 2006135671}
-  - 65: {fileID: 2006135670}
   - 23: {fileID: 2006135669}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Isle 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1141,18 +1085,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &2006135670
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2006135668}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &2006135671
 MeshFilter:
   m_ObjectHideFlags: 0
