@@ -160,8 +160,6 @@ public class Grid : MonoBehaviour
                 return null;
 
         }
-        else
-            Debug.Log("Could not find GridNode for position " + position);
 
         return ret;
     }
