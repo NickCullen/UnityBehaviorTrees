@@ -203,6 +203,7 @@ public class Grid : MonoBehaviour
         while(openSet.Count > 0)
         {
             current = Instance.GetLowestFromList(f_score);
+
             if (current == goal)
                 return Instance.ReconstructPath(cameFrom, goal);
 
