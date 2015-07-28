@@ -151,31 +151,31 @@ public class Grid : MonoBehaviour
         return Vector3.SqrMagnitude(from - to);
     }
 
-    GridNode GetLowestFromList(Dictionary<GridNode, float> map)
+    GridNode GetLowestFromList(Dictionary<int, float> map)
     {
         float lowest = 100000;
         GridNode ret = null;
-        foreach (KeyValuePair<GridNode, float> entry in map)
+        foreach (KeyValuePair<int, float> entry in map)
         {
             if(entry.Value < lowest)
             {
                 lowest = entry.Value;
-                ret = entry.Key;
+                ret = mNodes[entry.Key];
             }
         }
 
-        map.Remove(ret);
+        map.Remove(ret.mMyIndex);
         return ret;
     }
 
-    public List<GridNode> ReconstructPath(Dictionary<GridNode, GridNode> cameFrom, GridNode current)
+    public List<GridNode> ReconstructPath(Dictionary<int, GridNode> cameFrom, GridNode current)
     {
         List<GridNode> path = new List<GridNode>();
         path.Add(current);
 
-        while(cameFrom.ContainsKey(current))
+        while(cameFrom.ContainsKey(current.mMyIndex))
         {
-            current = cameFrom[current];
+            current = cameFrom[current.mMyIndex];
             path.Add(current);
         }
         path.Reverse();
@@ -189,15 +189,15 @@ public class Grid : MonoBehaviour
         List<GridNode> closedSet = new List<GridNode>(); //list if set of nodes already evaluated
         List<GridNode> openSet = new List<GridNode>();  //the set of tentative nodes to be evaluated, initially
         openSet.Add(start);
-        Dictionary<GridNode,GridNode> cameFrom = new Dictionary<GridNode,GridNode>(); //The map of navigated nodes
+        Dictionary<int,GridNode> cameFrom = new Dictionary<int,GridNode>(); //The map of navigated nodes
 
         //cost from start along best known path
-        Dictionary<GridNode, float> g_score = new Dictionary<GridNode, float>();
-        g_score[start] = 0.0f;
+        Dictionary<int, float> g_score = new Dictionary<int, float>();
+        g_score[start.mMyIndex] = 0.0f;
 
         //estimated total cost from start to goal through y
-        Dictionary<GridNode, float> f_score = new Dictionary<GridNode, float>();
-        f_score[start] = g_score[start] + Instance.HeuristicCost(start.mPosition, goal.mPosition);
+        Dictionary<int, float> f_score = new Dictionary<int, float>();
+        f_score[start.mMyIndex] = g_score[start.mMyIndex] + Instance.HeuristicCost(start.mPosition, goal.mPosition);
 
         GridNode current = null;
         while(openSet.Count > 0)
@@ -214,13 +214,13 @@ public class Grid : MonoBehaviour
                 if (closedSet.Contains(neighbor))
                     continue;
 
-                float tentative_g_score = g_score[current] + Vector3.SqrMagnitude(current.mPosition - neighbor.mPosition);
+                float tentative_g_score = g_score[current.mMyIndex] + Vector3.SqrMagnitude(current.mPosition - neighbor.mPosition);
                 
-                if(!openSet.Contains(neighbor) || tentative_g_score < g_score[neighbor])
+                if(!openSet.Contains(neighbor) || tentative_g_score < g_score[neighbor.mMyIndex])
                 {
-                    cameFrom[neighbor] = current;
-                    g_score[neighbor] = tentative_g_score;
-                    f_score[neighbor] = g_score[neighbor] + Instance.HeuristicCost(neighbor.mPosition, goal.mPosition);
+                    cameFrom[neighbor.mMyIndex] = current;
+                    g_score[neighbor.mMyIndex] = tentative_g_score;
+                    f_score[neighbor.mMyIndex] = g_score[neighbor.mMyIndex] + Instance.HeuristicCost(neighbor.mPosition, goal.mPosition);
 
                     if(!openSet.Contains(neighbor))
                     {
