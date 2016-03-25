@@ -6,7 +6,7 @@ public class BTEditor : EditorWindow
 {
 	static BTEditor instance;
 
-	List<BTRenderNode> RenderableNodes = new List<BTRenderNode>();
+    BTAsset Asset;
 
 	// Open the editor for the given asset
 	public static void OpenWindow(BTAsset asset)
@@ -19,39 +19,53 @@ public class BTEditor : EditorWindow
 	// Setup links and render nodes
 	void Init(BTAsset asset)
 	{
-		SetupNode(asset.Root);
+        Asset = asset;
+		SetupNodes();
+        SetupConnectors();
 	}
 
 	// Recursive call to create Render Nodes
-	void SetupNode(BTNode node)
+	void SetupNodes()
 	{
-		if(node == null) return;
+        foreach (BTNode node in Asset.Nodes)
+        {
+            node.Asset = Asset;
+        }
 
-		BTRenderNode rNode = new BTRenderNode();
-		rNode.Node = node;
-
-		RenderableNodes.Add(rNode);
-
-		foreach(BTNode child in node.Children)
-		{
-			SetupNode(child);
-		}
 	}
 
+    void SetupConnectors()
+    {
+        foreach (BTNodeConnector con in Asset.Connectors)
+        {
+            con.Asset = Asset;
+        }
 
-	// Render graph
-	void OnGUI()
+    }
+
+
+    // Render graph
+    void OnGUI()
 	{
 
 		BeginWindows();
 
-		for( int i = 0; i < RenderableNodes.Count; i++)
+		for( int i = 0; i < Asset.Nodes.Count; i++)
 		{
-			RenderableNodes[i].Render(i);
+			Asset.Nodes[i].Render(i);
 		}
 
 		EndWindows();
-	}
+
+        Handles.BeginGUI();
+
+        for (int i = 0; i < Asset.Connectors.Count; i++)
+        {
+            Asset.Connectors[i].Render(i);
+        }
+
+        Handles.EndGUI();
+    }
 
 
 

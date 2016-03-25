@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 #if UNITY_EDITOR
@@ -8,8 +8,15 @@ using UnityEditor;
 
 public class BTAsset : ScriptableObject 
 {
-	public string ID;		// ID of this behaviour tree
-	public BTNode Root;
+	public string ID;                                                           // ID of this behaviour tree
+
+    public int Root = 0;    // Idx of root node
+
+    public List<BTNode> Nodes = new List<BTNode>();
+    public List<BTNodeConnector> Connectors = new List<BTNodeConnector>();
+
+
+
 
 	#if UNITY_EDITOR
 
